@@ -5,6 +5,7 @@
 The following data cleaning steps were applied to prepare the dataset for analysis and modeling:
 
 ### 1. Handling Missing Values
+Using the null function creating the using .isnull().sum() and making the changes to the values. 
 - **Age:** Missing values were filled using the median (and group-wise median based on Pclass and Sex) to avoid distortion from outliers.
 - **Embarked:** Missing categorical values were filled using the mode (most frequent value).
 - **Cabin:** The column was dropped due to excessive missing values, making it unreliable for modeling.
