@@ -68,3 +68,42 @@ df['Survived'] = df['Survived'].astype(bool)
 df['Pclass'] = df['Pclass'].astype('category')
 df['Sex'] = df['Sex'].astype('category')
 #df['BookingDate'] = pd.to_datetime(df['BookingDate'])
+
+#Creating New Columns (Titanic Dataset)
+Create Age Category
+def age_category(age):
+    if age < 12:
+        return 'Child'
+    elif age < 18:
+        return 'Teen'
+    elif age < 60:
+        return 'Adult'
+    else:
+        return 'Senior'
+
+df['AgeGroup'] = df['Age'].apply(age_category)
+df['AgeGroup'].value_counts()                     #Print unique categories created
+df[['Age', 'AgeGroup']].head()                    #Display first few rows (Best) 
+
+
+df['FareBand'] = pd.qcut(df['Fare'], 4, labels=['Low','Medium','High','Very High'])
+df[['Fare', 'FareBand']].head()                     #Display first few rows (Best)
+print(df['FareBand'].value_counts())                #Print unique categories created
+
+df['IsAlone'] = (df['FamilySize'] == 1).astype(int)
+df[['FamilySize', 'IsAlone']].head()                  #Display first few rows (Best)
+
+
+df['FamilySize'] = df['SibSp'] + df['Parch'] + 1
+df[['SibSp', 'FamilySize']].head()                     #Display first few rows (Best)
+df[['SibSp', 'FamilySize']].value_counts()             #Print unique categories created
+
+
+df[['Age','AgeGroup','Fare','FareBand','FamilySize','IsAlone']].head()
+
+#Save Cleaned Dataset & Download
+df.to_csv('titanic_cleaned.csv', index=False)
+from google.colab import files
+files.download('titanic_cleaned.csv')
+
+
