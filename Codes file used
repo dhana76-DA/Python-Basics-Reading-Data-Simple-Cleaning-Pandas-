@@ -1,0 +1,70 @@
+Upload Dataset:
+
+from google.colab import files
+uploaded = files.upload() it will give you the option to select the file and you need to choose the data file.
+
+Titanic-Dataset.csv(text/csv) - 61194 bytes, last modified: 22/01/2026 - 100% done (Select the dataset file(s) from files option).
+Saving Titanic-Dataset.csv to Titanic-Dataset.csv
+
+import pandas as pd
+# Load dataset
+df = pd.read_csv('Titanic-Dataset.csv')
+# Display first 5 rows
+print(df.head())
+# Display dataset structure and missing values
+print(df.info())
+
+df.head()
+Shows:
+Column names
+Sample data
+Data types visually
+
+Helps verify:
+Correct file loaded
+Column order & meaning
+
+df.info()
+Shows:
+Total rows
+Column data types
+Non-null counts → detect missing values
+
+#Missing Value Cleaning using the median/mean and analyze the dataset. 
+
+Columns with high missing counts (e.g., Cabin, Age, Embarked) make imputation or removal.
+Replaces missing values in the Age column with the median age.
+Fills missing Age values using the median age of each Passenger Class and Gender group.
+Deletes the Cabin column from the dataset.
+Drops the Cabin column and extracts the first character as Deck information.
+Fills missing Embarked values with the most frequent category (mode).
+
+df['Age'].fillna(df['Age'].median(), inplace=True)
+df['Age'] = df.groupby(['Pclass','Sex'])['Age'].transform(lambda x: x.fillna(x.median()))
+
+df.drop(columns=['Cabin'], inplace=True, errors='ignore')
+if 'Cabin' in df.columns:
+    df.drop(columns=['Cabin'], inplace=True)
+    df['Deck'] = df['Cabin'].str[0]
+
+# Fills the column and reassigns it explicitly:
+df['Embarked'] = df['Embarked'].fillna(df['Embarked'].mode()[0])
+
+#Remove Duplicate Records:
+print("Before removing duplicates:", df.shape[0])
+print("Number of duplicate rows:", df.duplicated().sum())
+df.drop_duplicates(inplace=True)
+print("After removing duplicates:", df.shape[0])
+
+Before removing duplicates: 891
+Number of duplicate rows: 0
+After removing duplicates: 891
+
+
+#Datatype Conversion:
+Convert column datatypes to enable correct calculations, analysis, and modeling.
+"Datatypes were converted using .astype() and pd.to_datetime() to ensure correct calculations, memory efficiency, and compatibility with machine learning algorithms."
+df['Survived'] = df['Survived'].astype(bool)
+df['Pclass'] = df['Pclass'].astype('category')
+df['Sex'] = df['Sex'].astype('category')
+#df['BookingDate'] = pd.to_datetime(df['BookingDate'])
